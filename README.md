@@ -57,6 +57,26 @@ Options: `--only cam1,cam2` limits the run to some cameras; `--metadata file.csv
 
 First run (5 October 2026, production): four cameras, 12,712 images, all present after import.
 
+## Running a large upload from Terminal
+
+Above roughly 5,000 images, run the upload in your own Terminal rather than through an AI assistant: it is resumable, needs no supervision and can run for hours. Keep an external drive connected until it finishes.
+
+```bash
+python3 -m pip install --user requests      # one-off; add --break-system-packages if pip says "externally managed"
+cd "/path/to/scripts"
+PYTHONDONTWRITEBYTECODE=1 python3 wimp_api.py upload "/Volumes/MyDrive/project folder" --project "name fragment" --workers 8 --max-seconds 999999
+```
+
+Rerunning the same command after a stop or an error loses nothing. Chain several folders with `&&`.
+
+**Troubleshooting**
+
+| Symptom | Fix |
+|---|---|
+| `ModuleNotFoundError: No module named 'requests'` | `python3 -m pip install --user requests` |
+| macOS Terminal opens then shows `login: /bin/CustomShellStaff: No such file or directory` / `[Process completed]` (seen on a university-managed Mac whose account login shell is a missing managed program; the Terminal shell settings can be locked) | Use **Shell > New Command...** in the Terminal menu bar, type `/bin/zsh -l` and click Run. Or use the VS Code integrated terminal |
+| A dry run over a large external drive takes minutes | Normal: it lists every file. Run one project folder at a time |
+
 ## Other routes
 
 `skills/` holds the instructions we give Claude for this work, including the Nextcloud sync route (`wimp-nextcloud-upload`), a manual-drag fallback, and the status-sheet report. They are written for our lab's setup and are shared as worked examples.
